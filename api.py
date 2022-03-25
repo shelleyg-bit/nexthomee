@@ -175,3 +175,42 @@ class SearchListings:
             "Referer": "https://www.homesnap.com/homes/for_sale/OR/Portland/p_(21,31342)/c_45.541681,-122.654383/z_10",
             "Accept-Language": "en-US,en;q=0.9",
         }
+
+class ListingDetails:
+    def __init__(self, listing_id) -> None:
+        self.listing_id = listing_id
+
+    def url(self) -> str:
+        return "https://www.homesnap.com/service/Listings/GetDetails"
+    
+    def payload(self) -> dict:
+        return {
+            "listingID": self.listing_id,
+            "parts": 506,
+            "schoolsPolygonType": 1,
+            "promo": {
+                "promoCampaign": None,
+                "promoSource": None,
+                "promoMedium": "web-xs",
+                "promoTerm": None,
+                "promoContent": None,
+                "promoDate": None
+            }
+        }
+    
+    def headers(self) -> dict: 
+        return {
+        "Connection": "keep-alive",
+        "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="99", "Google Chrome";v="99"',
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Requested-With": "XMLHttpRequest",
+        "sec-ch-ua-mobile": "?0",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36",
+        "sec-ch-ua-platform": '"Windows"', "Origin": "https://www.homesnap.com", "Sec-Fetch-Site": "same-origin",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "Referer": "https://www.homesnap.com/OR/Portland/136-SE-74th-Avenue",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+
