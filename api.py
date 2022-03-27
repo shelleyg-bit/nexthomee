@@ -177,15 +177,15 @@ class SearchListings:
         }
 
 class ListingDetails:
-    def __init__(self, listing_id) -> None:
-        self.listing_id = listing_id
+    def __init__(self) -> None:
+        pass
 
     def url(self) -> str:
         return "https://www.homesnap.com/service/Listings/GetDetails"
     
-    def payload(self) -> dict:
+    def payload(self, listing_id) -> dict:
         return {
-            "listingID": self.listing_id,
+            "listingID": listing_id,
             "parts": 506,
             "schoolsPolygonType": 1,
             "promo": {
