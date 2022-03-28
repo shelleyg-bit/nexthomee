@@ -1,7 +1,8 @@
 
 class SearchListings:
-    def __init__(self, city='Portland, OR'):
+    def __init__(self, city):
         self.city = city
+        
         return
 
     def payload(self, maximumListings):
