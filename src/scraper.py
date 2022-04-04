@@ -91,21 +91,6 @@ class HomeScraper():
 
 
 
-        
-
-    
-    
-
-home_scraper = HomeScraper('Portland, OR')
-home_scraper.download_listings()
-
-home_scraper.to_pickle()
-
-with open('Portland, OR_homesnap_scraper.pickle', 'rb') as f:
-    portland_scraper = pickle.load(f) 
-
-all_listings_details = portland_scraper.download_details(2)
-all_listings_details
 
 def clean_listing_details(listings_details):
     cleaned_listings_details = [] 
@@ -135,23 +120,41 @@ def clean_listing_details(listings_details):
         cleaned_listings_details.append(details_dict)
     return pd.json_normalize(cleaned_listings_details)
 
-cleaned_details = clean_listing_details(all_listings_details)
+def load_rawlistings_from_pickle():
+    with open('Portland, OR_homesnap_scraper.pickle', 'rb') as f:
+        portland_scraper = pickle.load(f) 
+        all_listings_details = portland_scraper.download_details(5)
+        return all_listings_details
 
-cleaned_details.head()
-
-def store_all_listings(filename, data):
+def store_cleanlistings_to_pickle(filename, data):
     # store to local system as pickle file
     with open(filename, 'wb') as f:
         pickle.dump(data, f)
         return
 
-store_all_listings('portland_or_listings_df.pickle', cleaned_details)
+def scrape_listings_to_pickle():
+    home_scraper = HomeScraper('Portland, OR')
+    home_scraper.download_listings()
 
-with open('portland_or_listings_df.pickle', 'rb') as f:
-    portland_listings = pickle.load(f)
-
-portland_listings
+    home_scraper.to_pickle()
 
 
+def clean_listings_from_pickle_to_pickle():
+    all_listings_details = load_rawlistings_from_pickle()
+    cleaned_details = clean_listing_details(all_listings_details)
+    store_cleanlistings_to_pickle('portland_or_listings_df.pickle', cleaned_details)
+
+# TODO: figure out filesystem for docker to store the pickle files
+def main():
+    scrape_listings_to_pickle()
+    clean_listings_from_pickle_to_pickle()
+
+    with open('portland_or_listings_df.pickle', 'rb') as f:
+        portland_listings = pickle.load(f)
+    pd.set_option('display.max_columns', 20)
+    print(portland_listings)
+
+if __name__ == "__main__":
+    main()
 
 
