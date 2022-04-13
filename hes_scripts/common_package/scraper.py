@@ -73,7 +73,7 @@ class HomeScraper():
     
     def download_details(self, count=None):
         if not count:
-            count = self.count
+            count = self.total_listings
         # download details of all listings
         all_listings_details = []
         for listing in self.listings[:count]:
@@ -82,10 +82,9 @@ class HomeScraper():
             all_listings_details.append(details)
         return all_listings_details
     
-    def to_pickle(self):
+    def to_pickle(self, filepath):
         # store as object to local filesystem
-        filename = f'{self.city}_homesnap_scraper.pickle'
-        with open(filename, 'wb') as f:
+        with open(filepath, 'wb') as f:
             pickle.dump(self, f)
         return
 
@@ -120,36 +119,36 @@ def clean_listing_details(listings_details):
         cleaned_listings_details.append(details_dict)
     return pd.json_normalize(cleaned_listings_details)
 
-def load_rawlistings_from_pickle():
-    with open('Portland, OR_homesnap_scraper.pickle', 'rb') as f:
+def load_rawlistings_from_pickle(filepath):
+    with open(filepath, 'rb') as f:
         portland_scraper = pickle.load(f) 
-        all_listings_details = portland_scraper.download_details(5)
+        all_listings_details = portland_scraper.download_details(2)
         return all_listings_details
 
-def store_cleanlistings_to_pickle(filename, data):
-    # store to local system as pickle file
-    with open(filename, 'wb') as f:
-        pickle.dump(data, f)
-        return
 
-def scrape_listings_to_pickle():
-    home_scraper = HomeScraper('Portland, OR')
+def scrape_listings_to_pickle(city, filepath):
+    home_scraper = HomeScraper(city)
     home_scraper.download_listings()
 
-    home_scraper.to_pickle()
+    home_scraper.to_pickle(filepath)
 
 
-def clean_listings_from_pickle_to_pickle():
-    all_listings_details = load_rawlistings_from_pickle()
+def clean_listings_from_pickle_to_pickle(raw_filepath, clean_filepath):
+    all_listings_details = load_rawlistings_from_pickle(raw_filepath)
     cleaned_details = clean_listing_details(all_listings_details)
-    store_cleanlistings_to_pickle('portland_or_listings_df.pickle', cleaned_details)
+    with open(clean_filepath, 'wb') as f:
+        pickle.dump(cleaned_details, f)
+        return
 
 # TODO: figure out filesystem for docker to store the pickle files
 def main():
-    scrape_listings_to_pickle()
-    clean_listings_from_pickle_to_pickle()
+    city = 'Portland, OR'
+    raw_filepath = city + '_raw' + '.pickle' 
+    clean_filepath = city + '_clean' + '.pickle'
+    scrape_listings_to_pickle(city, raw_filepath)
+    clean_listings_from_pickle_to_pickle(raw_filepath, clean_filepath)
 
-    with open('portland_or_listings_df.pickle', 'rb') as f:
+    with open(clean_filepath, 'rb') as f:
         portland_listings = pickle.load(f)
     pd.set_option('display.max_columns', 20)
     print(portland_listings)

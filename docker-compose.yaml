@@ -27,12 +27,11 @@ x-airflow-common:
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: sqlite:////usr/local/airflow/db/airflow.db
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
   volumes:
-    - ./dags:/opt/airflow/dags
+    - ./hes_scripts:/opt/airflow/hes_scripts
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
-    - ./db:/usr/local/airflow/db
+    - ./db:/opt/airflow/db
     - ./raw_data:/opt/airflow/raw_data
-    - ./processed_data:/opt/airflow/processed_data
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
 
 services:
