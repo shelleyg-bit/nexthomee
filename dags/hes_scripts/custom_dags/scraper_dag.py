@@ -25,9 +25,9 @@ def clean_data():
     clean_listings_from_pickle_to_pickle(raw_filepath, clean_filepath)
 
 etl_dag = DAG('etl_dag', catchup=False, default_args=default_args)
-opr_scrape_data = PythonOperator(task_id='scrape', python_callable=scrape_listings_to_pickle,\
+opr_scrape_data = PythonOperator(task_id='scrape', python_callable=scrape_data,\
     dag=etl_dag)
-opr_clean_data = PythonOperator(task_id='clean', python_callable=clean_listings_from_pickle_to_pickle,\
+opr_clean_data = PythonOperator(task_id='clean', python_callable=clean_data,\
     dag=etl_dag)
 
 
