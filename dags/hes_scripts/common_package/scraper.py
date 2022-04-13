@@ -2,7 +2,7 @@ import requests
 import pickle
 import time
 import pandas as pd
-from api import SearchListings, ListingDetails
+from hes_scripts.common_package.api import SearchListings, ListingDetails
 
 toplevel_props = ['ListingID', 'DefaultParentArea', 'Zip', 'Url', 'Building', 'BathsFull', 'BathsHalf', 'Beds', 'CurrentPrice',\
     'Days', 'FullStreetAddress', 'Latitude', 'Longitude', 'ListDate', 'LotSize', 'OriginalPrice', 'Ownership',\
